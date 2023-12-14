@@ -56,7 +56,7 @@ class DashboardActivity : AppCompatActivity() {
         recyclerView.visibility = View.GONE
         rvLoadingData.visibility = View.VISIBLE
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Passwords/SavedPass")
+        databaseReference = FirebaseDatabase.getInstance().getReference("Passwords")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,7 +73,7 @@ class DashboardActivity : AppCompatActivity() {
                 rvAdapter.setOnItemClickListener(object : AdapterClass.onItemClickListener{
                     override fun onItemClick(position: Int) {
 
-                        val intent = Intent(this@DashboardActivity, EmployeeDetailsActivity::class.java)
+                        val intent = Intent(this@DashboardActivity, AccountActivity::class.java)
 
                         //put extras
                         intent.putExtra("ID", dataList[position].ID)

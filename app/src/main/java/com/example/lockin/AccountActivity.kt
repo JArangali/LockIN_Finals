@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.database.FirebaseDatabase
 
-class EmployeeDetailsActivity : AppCompatActivity() {
+class AccountActivity : AppCompatActivity() {
 
     private lateinit var tvWebsite: TextView
     private lateinit var tvUsername: TextView
