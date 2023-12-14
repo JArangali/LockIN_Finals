@@ -26,8 +26,6 @@ class NewPassword : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newpassword)
 
-
-
         saveButton = findViewById(R.id.updatebtn)
         backButton = findViewById(R.id.update_backbtn)
         webName = findViewById(R.id.updateSite_edt)
@@ -37,10 +35,18 @@ class NewPassword : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Passwords")
 
-
         saveButton.setOnClickListener {
             saveAccount()
+
+            val intent = Intent(this, DashboardActivity::class.java)
+            startActivity(intent)
         }
+
+        backButton.setOnClickListener {
+            val intent = Intent(this, DashboardActivity::class.java)
+            startActivity(intent)
+        }
+        
     }
 
     private fun saveAccount(){
