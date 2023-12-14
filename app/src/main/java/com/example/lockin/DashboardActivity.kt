@@ -17,7 +17,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class DashboardActivity : AppCompatActivity() {
+class
+DashboardActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
     private lateinit var rvLoadingData: TextView
