@@ -6,26 +6,28 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class DashboardActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
+    private lateinit var rvLoadingData: TextView
     lateinit var dataList: ArrayList<DataClass>
     lateinit var databaseReference: DatabaseReference
-    lateinit var titleList: Array<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-
-        databaseReference = Firebase.database.getReference("Passwords")
 
         val signout = findViewById(R.id.signout) as ImageView
         signout.setOnClickListener(){
@@ -45,34 +47,52 @@ class DashboardActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         dataList = arrayListOf<DataClass>()
+        rvLoadingData = findViewById(R.id.rvLoadingData)
+
         getData()
     }
 
     private fun getData(){
-                recyclerView.adapter = AdapterClass(dataList)
+        recyclerView.visibility = View.GONE
+        rvLoadingData.visibility = View.VISIBLE
 
-        databaseReference.child("SavedPass").child("-NlNruISDhOVn5LBRY_l").get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val snapshot = task.result
-                recyclerView = findViewById(R.id.recyclerView)
+        databaseReference = FirebaseDatabase.getInstance().getReference("Passwords/SavedPass")
 
-                titleList = arrayOf(
-                    snapshot.child("username").getValue(String::class.java).toString()
-                )
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                dataList.clear()
+                if (snapshot.exists()) {
+                    for (empSnap in snapshot.children) {
+                        val rvData = empSnap.getValue(DataClass::class.java)
+                        dataList.add(rvData!!)
+                    }
+                }
+                val rvAdapter = AdapterClass(dataList)
+                recyclerView.adapter = rvAdapter
 
-                titleList = arrayOf(
-                    snapshot.child("username").getValue(String::class.java).toString()
-                )
+                rvAdapter.setOnItemClickListener(object : AdapterClass.onItemClickListener{
+                    override fun onItemClick(position: Int) {
 
-                titleList = arrayOf(
-                    snapshot.child("username").getValue(String::class.java).toString()
-                )
+                        val intent = Intent(this@DashboardActivity, EmployeeDetailsActivity::class.java)
 
+                        //put extras
+                        intent.putExtra("ID", dataList[position].ID)
+                        intent.putExtra("Website", dataList[position].websiteName)
+                        intent.putExtra("Username", dataList[position].username)
+                        intent.putExtra("Password", dataList[position].password)
+                        startActivity(intent)
+                    }
 
+                })
 
-                Log.i("sampleshot", snapshot.child("username").getValue(String::class.java).toString())
+                recyclerView.visibility = View.VISIBLE
+                rvLoadingData.visibility = View.GONE
+
+    }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
             }
-        }
-            }
+        })
 
+            }
     }

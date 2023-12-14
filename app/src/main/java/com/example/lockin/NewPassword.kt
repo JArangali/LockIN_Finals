@@ -9,9 +9,6 @@ import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -31,11 +28,11 @@ class NewPassword : AppCompatActivity() {
 
 
 
-        saveButton = findViewById(R.id.savebtn)
-        backButton = findViewById(R.id.backbtn)
-        webName = findViewById(R.id.entWeb)
-        User = findViewById(R.id.entUser)
-        Pass = findViewById(R.id.entPass)
+        saveButton = findViewById(R.id.updatebtn)
+        backButton = findViewById(R.id.update_backbtn)
+        webName = findViewById(R.id.updateSite_edt)
+        User = findViewById(R.id.updateUser_edt)
+        Pass = findViewById(R.id.updatePass_edt)
         LILogo = findViewById(R.id.Logo)
 
         saveButton.setOnClickListener {
@@ -45,7 +42,7 @@ class NewPassword : AppCompatActivity() {
                 val username = User.text.toString()
                 val password = Pass.text.toString()
 
-                databaseReference = FirebaseDatabase.getInstance().getReference("Passwords")
+                databaseReference = FirebaseDatabase.getInstance().getReference("Passwords/SavedPass")
                 var dataKey = databaseReference.push().getKey()
                 var SavedPass = DataClass(websiteName, username, password)
                 databaseReference.child("SavedPass").child(dataKey.toString())
