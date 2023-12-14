@@ -46,7 +46,7 @@ class NewPassword : AppCompatActivity() {
             val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
         }
-        
+
     }
 
     private fun saveAccount(){
@@ -73,9 +73,9 @@ class NewPassword : AppCompatActivity() {
             .addOnCompleteListener {
                 Toast.makeText(this, "Data inserted successfully", Toast.LENGTH_LONG).show()
 
+                webName.text.clear()
                 User.text.clear()
                 Pass.text.clear()
-                webName.text.clear()
 
 
             }.addOnFailureListener { err ->

@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterClass(var dataList : ArrayList<DataClass>) :
-    RecyclerView.Adapter<AdapterClass.ViewHolderClass>() {
+class AdapterClass(private val dataList : ArrayList<DataClass>) :
+    RecyclerView.Adapter<AdapterClass.ViewHolder>() {
 
 
     private lateinit var rvListener: onItemClickListener
@@ -20,17 +20,16 @@ class AdapterClass(var dataList : ArrayList<DataClass>) :
         rvListener = clickListener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-        return ViewHolderClass(itemView, rvListener)
+        return ViewHolder(itemView, rvListener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderClass, Passwords: Int) {
-        var currentItems = dataList[Passwords]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentItems = dataList[position]
         holder.rvUsername.text = currentItems.username
         holder.rvWebsite.text = currentItems.websiteName
-        holder.rvPassword.text = currentItems.password
     }
 
 
@@ -38,9 +37,8 @@ class AdapterClass(var dataList : ArrayList<DataClass>) :
         return dataList.size
     }
 
-    class ViewHolderClass(itemView: View, clickListener: onItemClickListener) :
+    class ViewHolder(itemView: View, clickListener: onItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
-        var rvPassword: TextView = itemView.findViewById(R.id.rvPassword)
         var rvUsername: TextView = itemView.findViewById(R.id.rvUsername)
         var rvWebsite: TextView = itemView.findViewById(R.id.rvWebsite)
 

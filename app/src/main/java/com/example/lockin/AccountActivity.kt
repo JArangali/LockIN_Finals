@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class AccountActivity : AppCompatActivity() {
 
+    private lateinit var tvID: TextView
     private lateinit var tvWebsite: TextView
     private lateinit var tvUsername: TextView
     private lateinit var tvPassword: TextView
@@ -28,29 +29,31 @@ class AccountActivity : AppCompatActivity() {
 
         btnUpdate.setOnClickListener {
             openUpdateDialog(
-                intent.getStringExtra("empId").toString(),
-                intent.getStringExtra("empName").toString()
+                intent.getStringExtra("ID").toString(),
+                intent.getStringExtra("username").toString(),
             )
         }
 
         btnDelete.setOnClickListener {
             deleteRecord(
-                intent.getStringExtra("empId").toString()
+                intent.getStringExtra("ID").toString()
             )
         }
 
     }
 
     private fun initView() {
+        tvID = findViewById(R.id.rvID)
         tvWebsite = findViewById(R.id.rvWebsite)
         tvUsername = findViewById(R.id.rvUsername)
-        tvPassword = findViewById(R.id.tvPassword)
+        tvPassword = findViewById(R.id.rvPassword)
 
         btnUpdate = findViewById(R.id.btnUpdate)
         btnDelete = findViewById(R.id.btnDelete)
     }
 
     private fun setValuesToViews() {
+        tvID.text = intent.getStringExtra("rvID")
         tvWebsite.text = intent.getStringExtra("rvWebsite")
         tvUsername.text = intent.getStringExtra("rvUsername")
         tvPassword.text = intent.getStringExtra("rvPassword")
@@ -59,8 +62,8 @@ class AccountActivity : AppCompatActivity() {
     private fun deleteRecord(
         id: String
     ){
-        val dbRef = FirebaseDatabase.getInstance().getReference("Passwords").child(id)
-        val mTask = dbRef.removeValue()
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Passwords").child(id)
+        val mTask = databaseReference.removeValue()
 
         mTask.addOnSuccessListener {
             Toast.makeText(this, "Account Details Deleted", Toast.LENGTH_LONG).show()
@@ -74,8 +77,8 @@ class AccountActivity : AppCompatActivity() {
     }
 
     private fun openUpdateDialog(
-        empId: String,
-        empName: String
+        ID: String,
+        username: String
     ) {
         val mDialog = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -89,18 +92,18 @@ class AccountActivity : AppCompatActivity() {
 
         val btnUpdateData = mDialogView.findViewById<Button>(R.id.update_backbtn)
 
-        etWebsite.setText(intent.getStringExtra("Website").toString())
-        etUsername.setText(intent.getStringExtra("Username").toString())
-        etPassword.setText(intent.getStringExtra("Password").toString())
+        etWebsite.setText(intent.getStringExtra("websiteName").toString())
+        etUsername.setText(intent.getStringExtra("username").toString())
+        etPassword.setText(intent.getStringExtra("password").toString())
 
-        mDialog.setTitle("Updating $empName Record")
+        mDialog.setTitle("Updating $username Record")
 
         val alertDialog = mDialog.create()
         alertDialog.show()
 
         btnUpdateData.setOnClickListener {
             updateDataList(
-                empId,
+                ID,
                 etWebsite.text.toString(),
                 etUsername.text.toString(),
                 etPassword.text.toString()
@@ -123,9 +126,9 @@ class AccountActivity : AppCompatActivity() {
         username: String,
         password: String
     ) {
-        val dbRef = FirebaseDatabase.getInstance().getReference("Passwords").child(id)
-        val empInfo = DataClass(id, websiteName, username, password)
-        dbRef.setValue(empInfo)
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Passwords").child(id)
+        val rvInfo = DataClass(id, websiteName, username, password)
+        databaseReference.setValue(rvInfo)
     }
 
 }

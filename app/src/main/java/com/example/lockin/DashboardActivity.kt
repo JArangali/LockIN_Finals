@@ -46,8 +46,9 @@ class DashboardActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-        dataList = arrayListOf<DataClass>()
         rvLoadingData = findViewById(R.id.rvLoadingData)
+
+        dataList = arrayListOf<DataClass>()
 
         getData()
     }
@@ -76,10 +77,8 @@ class DashboardActivity : AppCompatActivity() {
                         val intent = Intent(this@DashboardActivity, AccountActivity::class.java)
 
                         //put extras
-                        intent.putExtra("ID", dataList[position].ID)
                         intent.putExtra("Website", dataList[position].websiteName)
                         intent.putExtra("Username", dataList[position].username)
-                        intent.putExtra("Password", dataList[position].password)
                         startActivity(intent)
                     }
 
